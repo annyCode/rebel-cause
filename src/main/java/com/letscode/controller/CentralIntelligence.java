@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.util.Arrays;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -147,6 +148,8 @@ public class CentralIntelligence implements CIView {
                                " | Raça: " + listaRebels[i].getRace());
             }
         }
+        System.out.println(listaRebels);
         System.out.println("-----> Relatório gerado com sucesso.");
     }
+
 }
