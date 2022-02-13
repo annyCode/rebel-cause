@@ -1,4 +1,4 @@
-package com.letscode;
+package com.letscode.view;
 
 import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;

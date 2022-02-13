@@ -1,13 +1,14 @@
-package com.letscode;
+package com.letscode.controller;
 
+import com.letscode.model.Race;
+import com.letscode.model.Rebel;
+import com.letscode.view.CIView;
 import lombok.AllArgsConstructor;
 import lombok.Cleanup;
-import lombok.NoArgsConstructor;
 
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
-import java.util.Arrays;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -49,11 +50,11 @@ public class CentralIntelligence implements CIView {
         System.out.println("Quantidade de Rebeldes");
         for(int i = 0; i < listaRebels.length; i++) {
             if(listaRebels[i] != null){
-                if(listaRebels[i].getRace() == Race.Humano){
+                if(listaRebels[i].getRace() == Race.HUMANO){
                     humano++;
-                }else if(listaRebels[i].getRace() == Race.Greek){
+                }else if(listaRebels[i].getRace() == Race.GREE){
                     greek++;
-                }else if(listaRebels[i].getRace() == Race.Rakata){
+                }else if(listaRebels[i].getRace() == Race.RAKATA){
                     rakata++;
                 }
             }
@@ -122,13 +123,13 @@ public class CentralIntelligence implements CIView {
 
         switch (race){
             case 1:
-                addRebels(name, age, Race.Humano);
+                addRebels(name, age, Race.HUMANO);
                 break;
             case 2:
-                addRebels(name, age, Race.Greek);
+                addRebels(name, age, Race.GREE);
                 break;
             case 3:
-                addRebels(name, age, Race.Rakata);
+                addRebels(name, age, Race.RAKATA);
                 break;
             default:
                 System.out.println("Raça inválida");

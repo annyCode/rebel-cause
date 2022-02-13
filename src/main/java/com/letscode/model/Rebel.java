@@ -1,4 +1,4 @@
-package com.letscode;
+package com.letscode.model;
 
 import lombok.Builder;
 import lombok.Data;

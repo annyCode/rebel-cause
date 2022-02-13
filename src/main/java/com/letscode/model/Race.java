@@ -1,5 +1,13 @@
-package com.letscode;
+package com.letscode.model;
 
 public enum Race {
-    Humano, Greek, Rakata;
+    HUMANO("Humano"),
+    GREE("Gree"),
+    RAKATA("Vapor");
+
+    private String description;
+
+    Race(String description) {this.description = description;}
+
+    public String getDescription() { return description; }
 }
