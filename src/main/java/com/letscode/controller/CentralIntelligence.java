@@ -3,62 +3,81 @@ package com.letscode.controller;
 import com.letscode.model.Race;
 import com.letscode.model.Rebel;
 import com.letscode.view.CIView;
+import jakarta.validation.*;
 import lombok.AllArgsConstructor;
 import lombok.Cleanup;
 
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
-import java.util.Random;
-import java.util.Scanner;
+import java.util.*;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 @AllArgsConstructor
 public class CentralIntelligence implements CIView {
-    private Rebel[] listaRebels;
+    private ArrayList<Rebel> listaRebels;
     private int option = 0, count = 0;
+    private static final Logger LOGGER = LogManager.getLogger(CentralIntelligence.class);
     Scanner sc;
-    Random random;
 
     public CentralIntelligence() {
-        this.listaRebels = new Rebel[20];
-        this.random = new Random();
+        this.listaRebels = new ArrayList<Rebel>();
         this.sc = new Scanner(System.in);
     }
 
     private void addRebels(String name, int age, Race race){
-        int index = random.nextInt(20);
 
         Rebel b = Rebel.builder()
                 .name(name)
                 .age(age)
                 .race(race)
                 .build();
-        if(this.listaRebels[index] == null){
-            listaRebels[index] = b;
+
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        Validator validator = factory.getValidator();
+
+        Set<ConstraintViolation<Rebel>> violations = validator.validate(b);
+
+        try {
+            requestAccess(b);
+        } catch(Exception e) {
+            LOGGER.fatal(e.getMessage());
+        }
+
+        violations.forEach(x -> LOGGER.error("Atributo: " + x.getPropertyPath() + " - " + x.getMessage()));
+    }
+
+    private void requestAccess(Rebel rebel){
+        if(rebel.getAge() > 0 && rebel.getAge() < 40 && rebel.getName().length() < 20 && !rebel.getName().isBlank()){
+            listaRebels.add(rebel);
             System.out.println("Rebelde admitido na aliança com sucesso.");
-        }else{
+        } else{
             System.err.println("Solicitação para ingresso na causa foi NEGADO.");
             System.err.println("Tente novamente, em outro momento.");
         }
-        count++;
 
+        count++;
     }
 
     private void printQuantityRebels(){
         int humano = 0, greek = 0, rakata = 0;
         System.out.println("----------------------------");
         System.out.println("Quantidade de Rebeldes");
-        for(int i = 0; i < listaRebels.length; i++) {
-            if(listaRebels[i] != null){
-                if(listaRebels[i].getRace() == Race.HUMANO){
+
+        for (Rebel rebel : listaRebels) {
+            if(!Objects.isNull(rebel)){
+                if(rebel.getRace() == Race.HUMANO){
                     humano++;
-                }else if(listaRebels[i].getRace() == Race.GREE){
+                }else if(rebel.getRace() == Race.GREE){
                     greek++;
-                }else if(listaRebels[i].getRace() == Race.RAKATA){
+                }else if(rebel.getRace() == Race.RAKATA){
                     rakata++;
                 }
             }
         }
+
         System.out.println(humano + " - Humanos");
         System.out.println(greek + " - Greek");
         System.out.println(rakata + " - Rakata");
@@ -142,14 +161,10 @@ public class CentralIntelligence implements CIView {
         System.out.println("----------------------------");
         @Cleanup PrintWriter writer = new PrintWriter("report-rebel.txt", "UTF-8");
         writer.println("LISTA DE REBELDES");
-        for(int i = 0; i < listaRebels.length; i++) {
-            if(listaRebels[i] != null){
-                writer.println("Nome: " + listaRebels[i].getName() +
-                               " | Idade: " + listaRebels[i].getAge() +
-                               " | Raça: " + listaRebels[i].getRace());
-            }
+        for (Rebel rebel : listaRebels) {
+            writer.println(count + " - "+ rebel.toString());
+            count++;
         }
-        System.out.println(listaRebels);
         System.out.println("-----> Relatório gerado com sucesso.");
     }
 
