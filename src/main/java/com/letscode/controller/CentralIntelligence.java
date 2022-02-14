@@ -1,7 +1,6 @@
 package com.letscode.controller;
 
-import com.letscode.model.Race;
-import com.letscode.model.Rebel;
+import com.letscode.model.*;
 import com.letscode.view.CIView;
 import jakarta.validation.*;
 import lombok.AllArgsConstructor;
@@ -159,6 +158,7 @@ public class CentralIntelligence implements CIView {
     @Override
     public void generateReport() throws FileNotFoundException, UnsupportedEncodingException {
         System.out.println("----------------------------");
+        listSort();
         @Cleanup PrintWriter writer = new PrintWriter("report-rebel.txt", "UTF-8");
         writer.println("LISTA DE REBELDES");
         for (Rebel rebel : listaRebels) {
@@ -167,5 +167,31 @@ public class CentralIntelligence implements CIView {
         }
         System.out.println("-----> Relatório gerado com sucesso.");
     }
+
+    private void listSort() {
+        System.out.println("Qual parâmetro será usado para ordenar o relátorio?");
+        System.out.println("1 - Nome");
+        System.out.println("2 - Idade");
+        System.out.println("3 - Raça");
+        int option = sc.nextInt();
+
+        switch (option) {
+            case 1:
+                Collections.sort(listaRebels, new SortByName());
+                break;
+            case 2:
+                Collections.sort(listaRebels, new SortByAge());
+                break;
+            case 3:
+                Collections.sort(listaRebels, new SortByRace());
+                break;
+            default:
+                System.out.println("Opção inválida, por favor escolha uma opção válida do menu.");
+
+        }
+    }
+
+
+
 
 }
